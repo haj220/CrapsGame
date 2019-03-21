@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<title>Let's Play Craps</title>
+
+<script>
+var firstRoll;
+var point;
+var gamestatus;
+var WON = 0,
+	LOST = 1,
+	CONTINUE_ROLLING = 2;
+	
+function InitCraps() {
+	firstRoll = true;
+	point = 0;
+	document.getElementById("msg").value = "Roll the Dice to begin play";
+}
+
+
+function RollTheDice() {
+	die1 = 1 + Math.floor( 6 * Math.random() );
+	die2 = 1 + Math.floor( 6 * Math.random() );
+	sum = die1 + die2;
+	//alert("got to here.  Die1 = " + die1);
+	document.getElementById("die1").innerHTML = die1;
+	document.getElementById("die2").innerHTML = die2;
+	document.getElementById("sum").innerHTML = sum;
+	return sum;
+}
+	
+function Play() {
+	sumOfDice = RollTheDice();
+	if (firstRoll) {
+		document.getElementById("point").innerHTML = "";
+		switch (sumOfDice) {
+			case 7:
+			case 11:
+				gamestatus = WON;
+				break;
+				
+			case 2:
+			case 3:
+			case 12:
+				gamestatus = LOST;
+				break;
+				
+			default:
+				gamestatus = CONTINUE_ROLLING;
+				point = sumOfDice;
+				firstRoll = false;
+				document.getElementById("point").innerHTML = point;
+				break;		
+		}
+	}
+	else if (sumOfDice == point) {
+		gamestatus = WON;
+		firstRoll = true;
+	}
+	else if (sumOfDice == 7) {
+		gamestatus = LOST;
+		firstRoll = true;
+	}
+		
+	switch (gamestatus) {
+		case WON:
+			document.getElementById("msg").value = "Player WINS. Roll Dice to play again";
+			firstRoll = true;
+			break;
+		case LOST:
+			document.getElementById("msg").value = "Player LOST. Roll Dice to play again";
+			firstRoll = true;
+			break;
+		case CONTINUE_ROLLING:
+			document.getElementById("msg").value = "Need to make point. Roll again";
+	}
+}	
+</script>
+</head>
+
+<body onload="InitCraps()">
+	<h1 align="center">The Game of Craps</h1>
+
+	<table border='1' align="center">
+		<tr>
+			<td align="center" width="100px">Die1</td>
+			<td id="die1" align="center" width="100px"></td>
+		</tr>		
+		<tr>
+			<td align="center" width="100px">Die2</td>
+			<td id="die2" align="center" width="100px"></td>
+		</tr>		
+		<tr>
+			<td align="center" width="100px">Sum</td>
+			<td id="sum" align="center" width="100px"></td>
+		</tr>		
+		<tr>
+			<td align="center" width="100px">Point</td>
+			<td id="point" align="center" width="100px"></td>
+		</tr>
+	</table>
+	
+	<p align="center">
+		<button onclick="Play()">Roll the Dice</button>
+	</p>
+	
+	<p align="center">
+		<input type="text" id="msg" readonly size="40" style="text-align:center;">
+	</p>
+</body>
+	
+</html>
